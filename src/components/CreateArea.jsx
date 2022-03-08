@@ -13,17 +13,28 @@ function CreateArea(props) {
 
   function handleChange(event){
     const {value, name} = event.target
-    setNote(prevNote => ({... prevNote, [name]: value}));
+    setNote(prevNote => ({...prevNote, [name]: value}));
+  }
+
+  function notEmpty(note){
+    if(note.title === "" || note.content === ""){
+      alert("Notes can't have empty fields");
+      return false;
+    }
+    return true;
   }
 
   function submitNote(event){
-    props.onAdd(note);
+    if(notEmpty(note)){
+      props.onAdd(note);
+    }
     event.preventDefault();
     setNote({
       title: "",
       content: ""
     })
   }
+  
   function expand(){
     setExpanded(true);
   }
@@ -36,7 +47,7 @@ function CreateArea(props) {
             <input 
               name="title" 
               value={note.title} 
-              placeholder="Title" 
+              placeholder="Title"
             />
         )}
         <textarea 
@@ -44,7 +55,8 @@ function CreateArea(props) {
           name="content" 
           value={note.content} 
           placeholder="Take a note..." 
-          rows={isExpanded ? 3 : 1} 
+          rows={isExpanded ? 3 : 1}
+          
         />
         <Zoom in={isExpanded}>
           <Fab onClick={submitNote}>
